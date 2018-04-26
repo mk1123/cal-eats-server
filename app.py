@@ -59,7 +59,7 @@ def get_specific_meal_info(day_num, dining_hall, time_of_day, type_of_meal):
 
 @app.route('/list')
 def get_meal_list():
-	return jsonify(all_foods_dict)
+	return jsonify(sorted(all_foods_dict))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
