@@ -35,7 +35,6 @@ for num in range(len(soups_list) + 1):
 			elif i.name == "p" and i.has_attr("class") and i.get("class")[0] == "station_wrap":
 				time_food_list[current_place][current_time][i.string.strip()] = []
 				current_cat = i.string.strip()
-				if current_cat not in all_foods_dict:
 			elif i.name == "p" and not i.has_attr("class") and i.contents[0].strip() != 'N/A':
 				time_food_list[current_place][current_time][current_cat].append(i.contents[0].strip())
 				if i.contents[0].strip() not in all_foods_dict:
