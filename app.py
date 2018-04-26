@@ -17,6 +17,8 @@ for i in range(2, 8):
 	data = response.text
 	soups_list.append(BeautifulSoup(data, 'lxml'))
 
+all_foods_dict = {}
+
 for num in range(len(soups_list) + 1):
 	time_food_list = {}
 	soup = soups_list[num - 1]
@@ -33,8 +35,11 @@ for num in range(len(soups_list) + 1):
 			elif i.name == "p" and i.has_attr("class") and i.get("class")[0] == "station_wrap":
 				time_food_list[current_place][current_time][i.string.strip()] = []
 				current_cat = i.string.strip()
+				if current_cat not in all_foods_dict:
+					all_foods_dict[current_cat] = set()
 			elif i.name == "p" and not i.has_attr("class") and i.contents[0].strip() != 'N/A':
 				time_food_list[current_place][current_time][current_cat].append(i.contents[0].strip())
+				all_foods_dict[current_cat].add(i.contents[0].strip())
 	data_dict[str(num)] = time_food_list
 
 @app.route('/<day_num>')
@@ -52,6 +57,10 @@ def get_time_of_day_info(day_num, dining_hall, time_of_day):
 @app.route('/<day_num>/<dining_hall>/<time_of_day>/<type_of_meal>')
 def get_specific_meal_info(day_num, dining_hall, time_of_day, type_of_meal):
 	return jsonify(data_dict[day_num][dining_hall][time_of_day][type_of_meal])
+
+@app.route('/list')
+def get_meal_list():
+	return jsonify(all_foods_dict)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
