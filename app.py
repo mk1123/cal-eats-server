@@ -17,7 +17,7 @@ for i in range(2, 8):
 	data = response.text
 	soups_list.append(BeautifulSoup(data, 'lxml'))
 
-all_foods_dict = {}
+all_foods_dict = []
 
 for num in range(len(soups_list) + 1):
 	time_food_list = {}
@@ -36,11 +36,10 @@ for num in range(len(soups_list) + 1):
 				time_food_list[current_place][current_time][i.string.strip()] = []
 				current_cat = i.string.strip()
 				if current_cat not in all_foods_dict:
-					all_foods_dict[current_cat] = []
 			elif i.name == "p" and not i.has_attr("class") and i.contents[0].strip() != 'N/A':
 				time_food_list[current_place][current_time][current_cat].append(i.contents[0].strip())
-				if i.contents[0].strip() not in all_foods_dict[current_cat]:
-					all_foods_dict[current_cat].append(i.contents[0].strip())
+				if i.contents[0].strip() not in all_foods_dict:
+					all_foods_dict.append(i.contents[0].strip())
 	data_dict[str(num)] = time_food_list
 
 @app.route('/<day_num>')
